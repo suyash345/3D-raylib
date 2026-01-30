@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <raymath.h>
 #include  <iostream>
 
 int main() {
@@ -14,31 +15,39 @@ int main() {
 	//Model model = LoadModelFromMesh(mesh);
 
 	Mesh cylinder = GenMeshCylinder(1, 2, 20); // more slices for round objects
-	Model model = LoadModelFromMesh(cylinder);
+	Model cylinder_model = LoadModelFromMesh(cylinder);
 
 
 	// texture
-
 	Image image = GenImageGradientLinear(20, 20, 1, RED, YELLOW);
 	Texture texture = LoadTextureFromImage(image);
-	SetMaterialTexture(&model.materials[0], MATERIAL_MAP_ALBEDO, texture);
+	SetMaterialTexture(&cylinder_model.materials[0], MATERIAL_MAP_ALBEDO, texture);
 
 
 	// Move
 	Vector3 pos = { 0.0f,0.0f,0.0f };
 
+	// Imports
+	Model ship = LoadModel("models/ship.glb");
+	Model rupee = LoadModel("models/rupee.gltf");
+
 	while (!WindowShouldClose()) {
+		//ship.transform = MatrixScale(10, 10, 10);
 		float delta_time = GetFrameTime();
-		pos.x += 2 * delta_time;
-		std::cout << pos.x << std::endl;
+		//pos.x += 2 * delta_time;
+		//pos.y += 2 * delta_time;
+		//pos.z += 2 * delta_time;
+
+		cylinder_model.transform = MatrixRotateY(30);
+
 		ClearBackground(WHITE);
 		BeginDrawing();
 		BeginMode3D(camera);
 		DrawGrid(10, 1);
 		DrawLine3D({ -4.0f,0.0f,-2.0f }, { 5.0f,2.0f,3.0f }, BLACK);
-		DrawModel(model, pos, 1, WHITE);
+		DrawModel(ship, pos, 1, WHITE);
+		//DrawModel(rupee, pos, 1, WHITE);
 		EndMode3D();
-
 		EndDrawing();
 	}
 	CloseWindow();
