@@ -14,20 +14,28 @@ int main() {
 	//Mesh mesh = GenMeshCube(1, 1, 1);
 	//Model model = LoadModelFromMesh(mesh);
 
+    
+    
+    
+    
+	// Move
+	Vector3 pos = { 0.0f,0.0f,0.0f };
+    
+    Shader shader = LoadShader(nullptr,"shaders/greyscale.fs"); // fragment shdader only.
+    
 	Mesh cylinder = GenMeshCylinder(1, 2, 20); // more slices for round objects
 	Model cylinder_model = LoadModelFromMesh(cylinder);
-
-
+    
 	// texture
 	Image image = GenImageGradientLinear(20, 20, 1, RED, YELLOW);
 	Texture texture = LoadTextureFromImage(image);
 	SetMaterialTexture(&cylinder_model.materials[0], MATERIAL_MAP_ALBEDO, texture);
-
-
-	// Move
-	Vector3 pos = { 0.0f,0.0f,0.0f };
-
-	// Imports
+    
+    
+    cylinder_model.materials[0].shader =  shader;
+    
+    
+    // Imports
 	Model ship = LoadModel("models/ship.glb");
 	Model rupee = LoadModel("models/rupee.gltf");
 
@@ -38,6 +46,12 @@ int main() {
 		//pos.y += 2 * delta_time;
 		//pos.z += 2 * delta_time;
 
+        if(IsKeyPressed(KEY_A)) {
+
+        }
+
+
+
 		cylinder_model.transform = MatrixRotateY(30);
 
 		ClearBackground(WHITE);
@@ -45,8 +59,9 @@ int main() {
 		BeginMode3D(camera);
 		DrawGrid(10, 1);
 		DrawLine3D({ -4.0f,0.0f,-2.0f }, { 5.0f,2.0f,3.0f }, BLACK);
-		DrawModel(ship, pos, 1, WHITE);
+		//DrawModel(ship, pos, 1, WHITE);
 		//DrawModel(rupee, pos, 1, WHITE);
+        DrawModel(cylinder_model,pos,1.0,WHITE);
 		EndMode3D();
 		EndDrawing();
 	}
